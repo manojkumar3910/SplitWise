@@ -63,6 +63,7 @@ import com.example.ui.components.SpendWiseTopBar
 import com.example.ui.theme.SpendWiseBackground
 import com.example.ui.theme.SpendWiseError
 import com.example.ui.theme.SpendWiseOnBackground
+import com.example.ui.theme.SpendWiseOnSurfaceVariant
 import com.example.ui.theme.SpendWisePrimary
 import com.example.ui.theme.SpendWisePrimaryContainer
 import com.example.ui.theme.SpendWiseSurfaceContainerHigh
@@ -81,6 +82,11 @@ fun ExpensesScreen(
 
     val filterChips = listOf("Today", "This Week", "This Month", "Custom")
 
+    val totalSpent = expenses.sumOf { it.amount }
+    val apiConnected by repository.isApiConnected.collectAsState()
+    val isSyncing by repository.isSyncing.collectAsState()
+    val apiStatusMessage by repository.apiStatusMessage.collectAsState()
+
     val filteredExpenses = expenses.filter {
         searchQuery.isBlank() || it.title.contains(searchQuery, ignoreCase = true) || it.category.contains(searchQuery, ignoreCase = true)
     }
@@ -91,7 +97,8 @@ fun ExpensesScreen(
         topBar = {
             SpendWiseTopBar(
                 title = "Alex Riviera",
-                subtitle = "Expenses tracker",
+                subtitle = if (isSyncing) "Syncing..." else "Expenses Tracker",
+                onNotificationClick = { repository.refreshAllData() },
                 onAvatarClick = { onNavigate(Screen.Profile.route) }
             )
         },
@@ -139,12 +146,12 @@ fun ExpensesScreen(
                 Text(
                     text = "Track and categorize your recent spending.",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color(0xFF53433F)
+                    color = SpendWiseOnSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Summary Peach Bento Card
+                // Summary Bento Card
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -159,27 +166,42 @@ fun ExpensesScreen(
                             .fillMaxWidth()
                             .padding(20.dp)
                     ) {
-                        Text(
-                            text = "TODAY'S SPENDING",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.8.sp,
-                            color = SpendWisePrimary
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "TOTAL RECORDED SPENDING",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.8.sp,
+                                color = SpendWisePrimary
+                            )
+                            Text(
+                                text = if (apiConnected) "● Live MongoDB" else "● Local Cache",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (apiConnected) SpendWisePrimary else Color(0xFF6B7280)
+                            )
+                        }
                         Spacer(modifier = Modifier.height(4.dp))
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
-                                text = "₹750",
+                                text = SpendWiseRepository.formatCurrency(totalSpent),
                                 style = MaterialTheme.typography.headlineLarge,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 36.sp,
-                                color = Color(0xFF201A18)
+                                fontSize = 34.sp,
+                                color = SpendWiseOnBackground
                             )
+                        }
+                        if (apiStatusMessage.isNotBlank()) {
+                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = ".00",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color(0xFF53433F),
-                                modifier = Modifier.padding(bottom = 4.dp)
+                                text = apiStatusMessage,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontSize = 11.sp,
+                                color = SpendWiseOnSurfaceVariant
                             )
                         }
                     }
@@ -191,7 +213,7 @@ fun ExpensesScreen(
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text("Search transactions...", color = Color(0xFF53433F).copy(alpha = 0.7f)) },
+                    placeholder = { Text("Search transactions...", color = SpendWiseOnSurfaceVariant.copy(alpha = 0.7f)) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Filled.Search,
@@ -245,7 +267,7 @@ fun ExpensesScreen(
                                     text = chip,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = if (isSelected) Color.White else Color(0xFF53433F)
+                                    color = if (isSelected) Color.White else Color(0xFF4B5563)
                                 )
                             }
                         }
@@ -262,7 +284,7 @@ fun ExpensesScreen(
                         text = dateHeader,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF53433F),
+                        color = SpendWiseOnBackground,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
@@ -360,14 +382,14 @@ fun ExpenseRowItem(expense: Expense) {
                     Icon(
                         imageVector = methodIcon,
                         contentDescription = null,
-                        tint = Color(0xFF53433F),
+                        tint = Color(0xFF4B5563),
                         modifier = Modifier.size(12.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = expense.paymentMethod,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF53433F)
+                        color = Color(0xFF4B5563)
                     )
                 }
             }

@@ -129,7 +129,7 @@ fun BottomNavBar(
                         Icon(
                             imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
                             contentDescription = item.label,
-                            tint = if (isSelected) SpendWisePrimary else Color(0xFF53433F).copy(alpha = 0.65f),
+                            tint = if (isSelected) SpendWisePrimary else Color(0xFF4B5563),
                             modifier = Modifier.size(22.dp)
                         )
                         Spacer(modifier = Modifier.height(2.dp))
@@ -138,7 +138,7 @@ fun BottomNavBar(
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 10.sp,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                            color = if (isSelected) SpendWisePrimary else Color(0xFF53433F).copy(alpha = 0.65f)
+                            color = if (isSelected) SpendWisePrimary else Color(0xFF4B5563)
                         )
                     }
                 }

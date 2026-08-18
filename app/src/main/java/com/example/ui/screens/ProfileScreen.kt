@@ -65,7 +65,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.filled.CloudSync
+import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material3.OutlinedTextField
 import com.example.data.SpendWiseRepository
+import com.example.data.api.ApiClient
 import com.example.navigation.Screen
 import com.example.ui.components.BottomNavBar
 import com.example.ui.theme.SpendWiseBackground
@@ -92,9 +98,71 @@ fun ProfileScreen(
     val portfolioSummary by repository.portfolioSummary.collectAsState()
     val goals by repository.goals.collectAsState()
 
+    val isApiConnected by repository.isApiConnected.collectAsState()
+    val isSyncing by repository.isSyncing.collectAsState()
+    val apiStatusMessage by repository.apiStatusMessage.collectAsState()
+
     var notificationsEnabled by remember { mutableStateOf(true) }
     var biometricEnabled by remember { mutableStateOf(true) }
     var showLogoutDialog by remember { mutableStateOf(false) }
+    var showServerConfigDialog by remember { mutableStateOf(false) }
+    var customServerUrl by remember { mutableStateOf(ApiClient.baseUrl) }
+
+    if (showServerConfigDialog) {
+        AlertDialog(
+            onDismissRequest = { showServerConfigDialog = false },
+            title = {
+                Text(
+                    text = "Backend API Endpoint",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = SpendWiseOnBackground
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = "Configure Express / Node.js backend server URL:",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF475569)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    OutlinedTextField(
+                        value = customServerUrl,
+                        onValueChange = { customServerUrl = it },
+                        label = { Text("API Base URL") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "• Emulator: http://10.0.2.2:5000/api/\n• Local Network: http://<YOUR_IP>:5000/api/\n• MongoDB Cluster: biofugitive.ah5xtvm.mongodb.net",
+                        fontSize = 12.sp,
+                        color = SpendWisePrimary
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        ApiClient.updateBaseUrl(customServerUrl)
+                        repository.refreshAllData()
+                        showServerConfigDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = SpendWisePrimary),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text("Save & Sync", fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showServerConfigDialog = false }) {
+                    Text("Cancel", color = SpendWisePrimary)
+                }
+            },
+            shape = RoundedCornerShape(20.dp),
+            containerColor = Color.White
+        )
+    }
 
     if (showLogoutDialog) {
         AlertDialog(
@@ -549,7 +617,52 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 5. Reports & Advisory
+            // 5. Database & Cloud Backend (MongoDB Atlas)
+            Text(
+                text = "Database & Cloud Backend",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = SpendWiseOnBackground
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("profile_database_card"),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = androidx.compose.foundation.BorderStroke(1.dp, SpendWiseSurfaceVariant),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    ProfileMenuRow(
+                        title = "MongoDB Atlas Cluster",
+                        subtitle = if (isApiConnected) "Connected (biofugitive)" else "Connecting / Local Mode",
+                        icon = Icons.Filled.Storage,
+                        onClick = { showServerConfigDialog = true }
+                    )
+                    HorizontalDivider(color = SpendWiseSurfaceVariant.copy(alpha = 0.5f), modifier = Modifier.padding(vertical = 10.dp))
+                    ProfileMenuRow(
+                        title = "Backend API URL",
+                        subtitle = ApiClient.baseUrl,
+                        icon = Icons.Filled.Dns,
+                        onClick = { showServerConfigDialog = true }
+                    )
+                    HorizontalDivider(color = SpendWiseSurfaceVariant.copy(alpha = 0.5f), modifier = Modifier.padding(vertical = 10.dp))
+                    ProfileMenuRow(
+                        title = if (isSyncing) "Syncing..." else "Sync Data Now",
+                        subtitle = apiStatusMessage,
+                        icon = Icons.Filled.Sync,
+                        onClick = { repository.refreshAllData() }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 6. Reports & Advisory
             Text(
                 text = "Reports & Support",
                 style = MaterialTheme.typography.titleMedium,

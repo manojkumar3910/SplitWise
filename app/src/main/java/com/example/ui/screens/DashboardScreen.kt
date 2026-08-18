@@ -74,13 +74,25 @@ fun DashboardScreen(
 ) {
     val portfolioSummary by repository.portfolioSummary.collectAsState()
     val expenses by repository.expenses.collectAsState()
+    val goals by repository.goals.collectAsState()
     val budgets by repository.budgets.collectAsState()
+    val userBalance by repository.userBalance.collectAsState()
+    val userIncome by repository.userIncome.collectAsState()
+    val isApiConnected by repository.isApiConnected.collectAsState()
+    val isSyncing by repository.isSyncing.collectAsState()
+    val apiStatusMessage by repository.apiStatusMessage.collectAsState()
+
+    val totalExpenses = expenses.sumOf { it.amount }
+    val totalGoalTarget = goals.sumOf { it.targetAmount }.let { if (it == 0.0) 400000.0 else it }
+    val totalGoalSaved = goals.sumOf { it.savedAmount }.let { if (it == 0.0) 207000.0 else it }
+    val goalProgressPercent = if (totalGoalTarget > 0) ((totalGoalSaved / totalGoalTarget) * 100).toFloat() else 0f
 
     Scaffold(
         topBar = {
             SpendWiseTopBar(
                 title = "Alex Riviera",
-                subtitle = "Good morning",
+                subtitle = if (isSyncing) "Syncing..." else "Good morning",
+                onNotificationClick = { repository.refreshAllData() },
                 onAvatarClick = { onNavigate(Screen.Profile.route) }
             )
         },
@@ -173,19 +185,19 @@ fun DashboardScreen(
                     ) {
                         Column {
                             Text(
-                                text = "Current Savings",
+                                text = "Current Goals Progress",
                                 fontSize = 12.sp,
                                 color = SpendWiseOnSurfaceVariant
                             )
                             Text(
-                                text = "₹62,450 / ₹1,00,000",
+                                text = "${SpendWiseRepository.formatCurrency(totalGoalSaved)} / ${SpendWiseRepository.formatCurrency(totalGoalTarget)}",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = SpendWiseOnBackground
                             )
                         }
                         Text(
-                            text = "62.4%",
+                            text = String.format(java.util.Locale.US, "%.1f%%", goalProgressPercent),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = SpendWisePrimary
@@ -195,7 +207,7 @@ fun DashboardScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     LinearProgressIndicator(
-                        progress = { 0.624f },
+                        progress = { (goalProgressPercent / 100f).coerceIn(0f, 1f) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(6.dp)
@@ -215,16 +227,16 @@ fun DashboardScreen(
             ) {
                 MetricCard(
                     title = "Balance",
-                    amount = "₹6,000",
-                    change = "+2.4%",
-                    isPositive = true,
+                    amount = SpendWiseRepository.formatCurrency(userBalance),
+                    change = if (isApiConnected) "● MongoDB" else "● Local",
+                    isPositive = isApiConnected,
                     icon = Icons.Filled.AccountBalanceWallet,
                     iconTint = SpendWisePrimary,
                     modifier = Modifier.weight(1f).testTag("metric_balance")
                 )
                 MetricCard(
                     title = "Income",
-                    amount = "₹40,000",
+                    amount = SpendWiseRepository.formatCurrency(userIncome),
                     change = "+5.1%",
                     isPositive = true,
                     icon = Icons.Filled.ArrowDownward,
@@ -241,8 +253,8 @@ fun DashboardScreen(
             ) {
                 MetricCard(
                     title = "Expenses",
-                    amount = "₹24,000",
-                    change = "-1.2%",
+                    amount = SpendWiseRepository.formatCurrency(totalExpenses),
+                    change = "${expenses.size} items",
                     isPositive = false,
                     icon = Icons.Filled.ArrowUpward,
                     iconTint = SpendWiseError,
@@ -250,8 +262,8 @@ fun DashboardScreen(
                 )
                 MetricCard(
                     title = "Investments",
-                    amount = "₹10,000",
-                    change = "+12.5%",
+                    amount = SpendWiseRepository.formatCurrency(portfolioSummary.totalValue),
+                    change = "+${portfolioSummary.profitPercent}%",
                     isPositive = true,
                     icon = Icons.Filled.ShowChart,
                     iconTint = SpendWisePrimary,
@@ -292,7 +304,7 @@ fun DashboardScreen(
                             Text(
                                 text = "Total Holdings",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = Color(0xFF53433F)
+                                color = SpendWiseOnSurfaceVariant
                             )
                         }
 
@@ -365,14 +377,14 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 4. Recent Expenses Card (Peach Tinted Container)
+            // 4. Recent Expenses Card (Clean White Container)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("dashboard_recent_transactions_card"),
                 shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = SpendWiseSurfaceContainerLow),
-                border = androidx.compose.foundation.BorderStroke(1.dp, SpendWiseSurfaceContainerHigh),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = androidx.compose.foundation.BorderStroke(1.dp, SpendWiseSurfaceVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
@@ -469,13 +481,13 @@ fun MiniAssetPill(
             Text(
                 text = label,
                 fontSize = 11.sp,
-                color = Color(0xFF53433F)
+                color = Color(0xFF4B5563)
             )
             Text(
                 text = amount,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF201A18)
+                color = SpendWiseOnBackground
             )
         }
     }
@@ -511,7 +523,7 @@ fun MetricCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF53433F)
+                    color = Color(0xFF4B5563)
                 )
                 Box(
                     modifier = Modifier
@@ -606,7 +618,7 @@ fun RecentTransactionRow(
                 Text(
                     text = category,
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF53433F)
+                    color = Color(0xFF4B5563)
                 )
             }
         }

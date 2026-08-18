@@ -92,7 +92,7 @@ fun SpendWiseTopBar(
                     .clip(CircleShape)
                     .background(Color.White)
                     .border(1.dp, SpendWiseSurfaceVariant, CircleShape)
-                    .testTag("notifications_button")
+                    .testTag("sync_refresh_button")
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,

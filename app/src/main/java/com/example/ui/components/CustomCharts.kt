@@ -95,7 +95,7 @@ fun PortfolioPerformanceChart(
                             text = tf,
                             fontSize = 11.sp,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                            color = if (isSelected) SpendWisePrimary else Color(0xFF53433F)
+                            color = if (isSelected) SpendWisePrimary else Color(0xFF4B5563)
                         )
                     }
                 }
@@ -118,7 +118,7 @@ fun PortfolioPerformanceChart(
                     Offset(x = index * stepX, y = normY * h)
                 }
 
-                // Draw terracotta gradient filled area
+                // Draw gradient filled area
                 val fillPath = Path().apply {
                     moveTo(0f, h)
                     lineTo(points.first().x, points.first().y)
@@ -187,7 +187,7 @@ fun PortfolioPerformanceChart(
                     text = m,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF53433F)
+                    color = Color(0xFF4B5563)
                 )
             }
         }

@@ -70,6 +70,7 @@ import com.example.ui.theme.SpendWiseError
 import com.example.ui.theme.SpendWiseErrorContainer
 import com.example.ui.theme.SpendWiseGold
 import com.example.ui.theme.SpendWiseOnBackground
+import com.example.ui.theme.SpendWiseOnSurfaceVariant
 import com.example.ui.theme.SpendWiseOnErrorContainer
 import com.example.ui.theme.SpendWisePrimary
 import com.example.ui.theme.SpendWisePrimaryContainer
@@ -150,7 +151,7 @@ fun FinancialGoalsScreen(
                         Text(
                             text = "Set targets and build your future.",
                             style = MaterialTheme.typography.bodyLarge,
-                            color = Color(0xFF53433F)
+                            color = SpendWiseOnSurfaceVariant
                         )
                     }
 
@@ -225,7 +226,7 @@ fun FinancialGoalsScreen(
                                 Text(
                                     text = "Overall",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = Color(0xFF53433F)
+                                    color = SpendWiseOnSurfaceVariant
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
@@ -262,19 +263,19 @@ fun FinancialGoalsScreen(
                             val isSelected = chip == selectedFilter
                             Box(
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(20.dp))
-                                    .background(if (isSelected) SpendWisePrimary else Color.White)
-                                    .border(1.dp, if (isSelected) SpendWisePrimary else SpendWiseSurfaceVariant, RoundedCornerShape(20.dp))
-                                    .clickable { selectedFilter = chip }
-                                    .padding(horizontal = 14.dp, vertical = 6.dp)
-                                    .testTag("goal_filter_$chip"),
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(if (isSelected) SpendWisePrimary else Color.White)
+                                .border(1.dp, if (isSelected) SpendWisePrimary else SpendWiseSurfaceVariant, RoundedCornerShape(20.dp))
+                                .clickable { selectedFilter = chip }
+                                .padding(horizontal = 14.dp, vertical = 6.dp)
+                                .testTag("goal_filter_$chip"),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = chip,
                                     fontSize = 12.sp,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                    color = if (isSelected) Color.White else Color(0xFF53433F)
+                                    color = if (isSelected) Color.White else Color(0xFF4B5563)
                                 )
                             }
                         }
@@ -291,7 +292,7 @@ fun FinancialGoalsScreen(
                         Text(
                             text = "Sort by",
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF53433F)
+                            color = SpendWiseOnSurfaceVariant
                         )
                         Icon(
                             imageVector = Icons.Filled.KeyboardArrowDown,

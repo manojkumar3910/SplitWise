@@ -216,7 +216,7 @@ fun AddExpenseScreen(
                                             style = TextStyle(
                                                 fontSize = 38.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color(0xFF53433F).copy(alpha = 0.4f)
+                                                color = Color(0xFF4B5563).copy(alpha = 0.4f)
                                             )
                                         )
                                     }
@@ -331,7 +331,7 @@ fun AddExpenseScreen(
                                         text = subcat,
                                         fontSize = 12.sp,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                        color = if (isSelected) Color.White else Color(0xFF53433F)
+                                        color = if (isSelected) Color.White else Color(0xFF4B5563)
                                     )
                                 }
                             }
@@ -523,7 +523,7 @@ fun AddExpenseScreen(
                                 Text(
                                     text = "DESCRIPTION",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = Color(0xFF53433F)
+                                    color = Color(0xFF4B5563)
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 OutlinedTextField(

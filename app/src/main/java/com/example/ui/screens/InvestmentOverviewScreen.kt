@@ -65,6 +65,7 @@ import com.example.ui.theme.SpendWiseBackground
 import com.example.ui.theme.SpendWiseGold
 import com.example.ui.theme.SpendWiseGoldContainer
 import com.example.ui.theme.SpendWiseOnBackground
+import com.example.ui.theme.SpendWiseOnSurfaceVariant
 import com.example.ui.theme.SpendWisePrimary
 import com.example.ui.theme.SpendWisePrimaryContainer
 import com.example.ui.theme.SpendWiseSecondary
@@ -147,7 +148,7 @@ fun InvestmentOverviewScreen(
                     Text(
                         text = "Track and optimize your portfolio",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color(0xFF53433F)
+                        color = SpendWiseOnSurfaceVariant
                     )
                 }
 
@@ -199,7 +200,7 @@ fun InvestmentOverviewScreen(
                             text = tab,
                             fontSize = 12.sp,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
-                            color = if (isSelected) Color.White else Color(0xFF53433F)
+                            color = if (isSelected) Color.White else Color(0xFF4B5563)
                         )
                     }
                 }
@@ -459,7 +460,7 @@ fun InvestmentOverviewScreen(
                                 Text(
                                     text = "Next date: 25 Aug 2026",
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = Color(0xFF53433F)
+                                    color = Color(0xFF4B5563)
                                 )
                             }
                         }
@@ -474,7 +475,7 @@ fun InvestmentOverviewScreen(
                             Text(
                                 text = "Monthly",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = Color(0xFF53433F)
+                                color = Color(0xFF4B5563)
                             )
                         }
                     }
@@ -561,7 +562,7 @@ fun OverviewMetricCard(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF53433F)
+                color = Color(0xFF4B5563)
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -581,7 +582,7 @@ fun OverviewMetricCard(
                     Icon(
                         imageVector = if (isPositive) Icons.Filled.ArrowUpward else Icons.Filled.ArrowDownward,
                         contentDescription = null,
-                        tint = if (isPositive) SpendWiseSuccess else Color(0xFF53433F),
+                        tint = if (isPositive) SpendWiseSuccess else Color(0xFF4B5563),
                         modifier = Modifier.size(12.dp)
                     )
                     Spacer(modifier = Modifier.width(2.dp))
@@ -590,7 +591,7 @@ fun OverviewMetricCard(
                     text = subtext,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isPositive == true) SpendWiseSuccess else Color(0xFF53433F)
+                    color = if (isPositive == true) SpendWiseSuccess else Color(0xFF4B5563)
                 )
             }
         }
@@ -641,7 +642,7 @@ fun AssetPerformanceRow(
                 Text(
                     text = currentVal,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF53433F)
+                    color = Color(0xFF4B5563)
                 )
             }
         }
@@ -720,7 +721,7 @@ fun HoldingAssetCard(
                     Text(
                         text = tag,
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color(0xFF53433F)
+                        color = Color(0xFF4B5563)
                     )
                 }
             }
@@ -738,7 +739,7 @@ fun HoldingAssetCard(
                         text = "$returns ($percent)",
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (isPositive) SpendWiseSuccess else Color(0xFF53433F)
+                        color = if (isPositive) SpendWiseSuccess else Color(0xFF4B5563)
                     )
                 }
             }
