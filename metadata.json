@@ -1,0 +1,6 @@
+{
+  "name": "SpendWise",
+  "description": "SpendWise - Smart personal finance, expense tracking, investment portfolio, and financial goal management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
