@@ -92,7 +92,7 @@ fun ExpensesScreen(
             SpendWiseTopBar(
                 title = "Alex Riviera",
                 subtitle = "Expenses tracker",
-                onAvatarClick = { onNavigate(Screen.InvestmentOverview.route) }
+                onAvatarClick = { onNavigate(Screen.Profile.route) }
             )
         },
         bottomBar = {

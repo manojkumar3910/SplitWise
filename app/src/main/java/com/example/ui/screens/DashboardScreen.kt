@@ -57,6 +57,7 @@ import com.example.ui.components.SpendWiseTopBar
 import com.example.ui.theme.SpendWiseBackground
 import com.example.ui.theme.SpendWiseError
 import com.example.ui.theme.SpendWiseOnBackground
+import com.example.ui.theme.SpendWiseOnSurfaceVariant
 import com.example.ui.theme.SpendWisePrimary
 import com.example.ui.theme.SpendWisePrimaryContainer
 import com.example.ui.theme.SpendWiseSecondaryContainer
@@ -80,7 +81,7 @@ fun DashboardScreen(
             SpendWiseTopBar(
                 title = "Alex Riviera",
                 subtitle = "Good morning",
-                onAvatarClick = { onNavigate(Screen.InvestmentOverview.route) }
+                onAvatarClick = { onNavigate(Screen.Profile.route) }
             )
         },
         bottomBar = {
@@ -101,7 +102,7 @@ fun DashboardScreen(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
 
-            // 1. Highlight: Financial Goals Peach Bento Card (Clickable -> Financial Goals)
+            // 1. Highlight: Financial Goals Sky Bento Card (Clickable -> Financial Goals)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,7 +151,7 @@ fun DashboardScreen(
                                     text = "Emergency Fund & Vacation",
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color(0xFF201A18)
+                                    color = SpendWiseOnBackground
                                 )
                             }
                         }
@@ -174,13 +175,13 @@ fun DashboardScreen(
                             Text(
                                 text = "Current Savings",
                                 fontSize = 12.sp,
-                                color = Color(0xFF53433F)
+                                color = SpendWiseOnSurfaceVariant
                             )
                             Text(
                                 text = "₹62,450 / ₹1,00,000",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF201A18)
+                                color = SpendWiseOnBackground
                             )
                         }
                         Text(
@@ -200,7 +201,7 @@ fun DashboardScreen(
                             .height(6.dp)
                             .clip(RoundedCornerShape(3.dp)),
                         color = SpendWisePrimary,
-                        trackColor = Color(0xFFE5B8AB).copy(alpha = 0.5f),
+                        trackColor = SpendWisePrimary.copy(alpha = 0.2f),
                     )
                 }
             }

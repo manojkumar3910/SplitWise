@@ -96,7 +96,7 @@ fun FinancialGoalsScreen(
             SpendWiseTopBar(
                 title = "Alex Riviera",
                 subtitle = "Goal planner",
-                onAvatarClick = { onNavigate(Screen.InvestmentOverview.route) }
+                onAvatarClick = { onNavigate(Screen.Profile.route) }
             )
         },
         bottomBar = {

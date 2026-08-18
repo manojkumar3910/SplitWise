@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color(0xFFF7F9FB)
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
                     SpendWiseNavGraph(navController = navController)

@@ -22,6 +22,7 @@ import com.example.ui.screens.InvestmentOverviewScreen
 import com.example.ui.screens.InvestmentTransactionsScreen
 import com.example.ui.screens.InvestmentsScreen
 import com.example.ui.screens.LoginScreen
+import com.example.ui.screens.ProfileScreen
 
 @Composable
 fun SpendWiseNavGraph(
@@ -247,6 +248,29 @@ fun SpendWiseNavGraph(
                         popUpTo(Screen.Dashboard.route) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
+                    }
+                }
+            )
+        }
+
+        // Profile Screen
+        composable(
+            route = Screen.Profile.route,
+            enterTransition = { fadeIn(tween(200)) },
+            exitTransition = { fadeOut(tween(200)) }
+        ) {
+            ProfileScreen(
+                repository = repository,
+                onNavigate = { targetRoute ->
+                    navController.navigate(targetRoute) {
+                        popUpTo(Screen.Dashboard.route) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onLogout = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Dashboard.route) { inclusive = true }
                     }
                 }
             )

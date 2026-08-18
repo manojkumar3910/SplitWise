@@ -60,7 +60,7 @@ enum class NavItem(
     EXPENSES("Expenses", Icons.Filled.Payments, Icons.Outlined.Payments, Screen.Expenses.route, "nav_expenses"),
     INVESTMENTS("Investments", Icons.Filled.TrendingUp, Icons.Outlined.TrendingUp, Screen.InvestmentOverview.route, "nav_investments"),
     GOALS("Goals", Icons.Filled.TrackChanges, Icons.Outlined.TrackChanges, Screen.FinancialGoals.route, "nav_goals"),
-    PROFILE("Profile", Icons.Filled.Person, Icons.Outlined.Person, Screen.InvestmentOverview.route, "nav_profile")
+    PROFILE("Profile", Icons.Filled.Person, Icons.Outlined.Person, Screen.Profile.route, "nav_profile")
 }
 
 @Composable
@@ -95,7 +95,7 @@ fun BottomNavBar(
                     NavItem.EXPENSES -> currentRoute == Screen.Expenses.route || currentRoute == Screen.AddExpense.route
                     NavItem.INVESTMENTS -> currentRoute == Screen.Investments.route || currentRoute == Screen.InvestmentOverview.route || currentRoute == Screen.InvestmentTransactions.route || currentRoute == Screen.AddInvestmentSelect.route || currentRoute == Screen.AddStockInvestment.route
                     NavItem.GOALS -> currentRoute == Screen.FinancialGoals.route
-                    NavItem.PROFILE -> false
+                    NavItem.PROFILE -> currentRoute == Screen.Profile.route
                 }
 
                 val interactionSource = remember { MutableInteractionSource() }
